@@ -1,0 +1,3 @@
+recursive-include zeam/jsontemplate/resources *.*
+recursive-include zeam/jsontemplate *.txt
+include *.txt
