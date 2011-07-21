@@ -16,7 +16,7 @@ def read(*rnames):
 long_description = (
     read('README.txt')
     + '\n' +
-    read('zeam', 'jsontemplate', 'test_json_template.txt')
+    read('src', 'zeam', 'jsontemplate', 'test_jsontemplate.txt')
     + '\n' +
     read('CHANGES.txt'))
 
@@ -26,11 +26,13 @@ setup(
     description="Fanstatic packaging of json template",
     long_description=long_description,
     classifiers=[],
-    keywords='',
+    keywords='fanstatic jsontemplate',
     author='Fanstatic Developers',
     author_email='fanstatic@googlegroups.com',
     license='BSD',
-    packages=find_packages(),namespace_packages=['zeam'],
+    package_dir={'': 'src'},
+    namespace_packages=['zeam'],
+    packages=find_packages('src'),
     include_package_data=True,
     zip_safe=False,
     install_requires=[
