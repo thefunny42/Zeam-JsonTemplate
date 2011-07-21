@@ -1,4 +1,4 @@
 from fanstatic import Library, Resource
 
-library = Library('json_template', 'resources')
-json_template = Resource(library, 'json-template.js')
+library = Library('jsontemplate', 'resources')
+jsontemplate = Resource(library, 'json-template.js')

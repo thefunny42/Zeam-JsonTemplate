@@ -6,8 +6,9 @@ Introduction
 
 This library packages a patched version of json template for
 `fanstatic`_. This behaved exactly like the official version, except
-the option ``undefined_str`` can be a function, that return the value
-to use in case of an undefined variable.
+it add an option ``undefined_callable`` that is a function that will
+be called in case of an undefined value, to return the value to be
+use.
 
 .. _`fanstatic`: http://fanstatic.org
 

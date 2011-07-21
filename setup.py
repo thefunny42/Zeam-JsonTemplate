@@ -39,7 +39,7 @@ setup(
         ],
     entry_points={
         'fanstatic.libraries': [
-            'json_template = zeam.jsontemplate:library',
+            'jsontemplate = zeam.jsontemplate:library',
             ],
         },
     )

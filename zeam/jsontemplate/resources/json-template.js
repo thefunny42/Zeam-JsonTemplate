@@ -170,7 +170,7 @@ var PrefixRegistry = function(functions) {
             args = user_str.split(splitchar).slice(1);
           }
           return [func, args];
-        } 
+        }
       }
       return [null, null];  // No formatter
     }
@@ -195,7 +195,7 @@ var ChainedRegistry = function(registries) {
 // Template implementation
 //
 
-function _ScopedContext(context, undefined_str) {
+function _ScopedContext(context, options) {
   // The stack contains:
   //   The current context (an object).
   //   An iteration index.  -1 means we're NOT iterating.
@@ -243,13 +243,15 @@ function _ScopedContext(context, undefined_str) {
     },
 
     _Undefined: function(name) {
-      if (undefined_str === undefined) {
-        throw {
-          name: 'UndefinedVariable', message: name + ' is not defined'
-        };
-      } else {
-        return undefined_str;
-      }
+      if (options.undefined_str !== undefined) {
+          return options.undefined_str;
+      };
+      if (options.undefined_callable !== undefined) {
+          return options.undefined_callable(name);
+      };
+      throw {
+        name: 'UndefinedVariable', message: name + ' is not defined'
+      };
     },
 
     _LookUpStack: function(name) {
@@ -452,9 +454,8 @@ function _DoPredicates(args, context, callback) {
 
 function _DoRepeatedSection(args, context, callback) {
   var block = args;
-
-  items = context.PushSection(block.section_name);
-  pushed = true;
+  var items = context.PushSection(block.section_name);
+  var pushed = true;
 
   if (items && items.length > 0) {
     // TODO: check that items is an array; apparently this is hard in JavaScript
@@ -464,7 +465,7 @@ function _DoRepeatedSection(args, context, callback) {
     // Execute the statements in the block for every item in the list.
     // Execute the alternate block on every iteration except the last.  Each
     // item could be an atom (string, integer, etc.) or a dictionary.
-    
+
     var last_index = items.length - 1;
     var statements = block.Statements();
     var alt_statements = block.Statements('alternate');
@@ -754,11 +755,10 @@ function Template(template_str, options) {
 
   this._options = options || {};
   this._program = _Compile(template_str, this._options);
-}
+};
 
 Template.prototype.render = function(data_dict, callback) {
-  // options.undefined_str can either be a string or undefined
-  var context = _ScopedContext(data_dict, this._options.undefined_str);
+  var context = _ScopedContext(data_dict, this._options);
   _Execute(this._program.Statements(), context, callback);
 };
 
@@ -777,7 +777,7 @@ Template.prototype.expand = function(data_dict) {
 
 var OPTION_RE = /^([a-zA-Z\-]+):\s*(.*)/;
 var OPTION_NAMES = [
-    'meta', 'format-char', 'default-formatter', 'undefined-str'];
+    'meta', 'format-char', 'default-formatter', 'undefined-str', 'undefined-callable'];
 // Use this "linear search" instead of Array.indexOf, which is nonstandard
 var OPTION_NAMES_RE = new RegExp(OPTION_NAMES.join('|'));
 
