@@ -1,3 +1,2 @@
-recursive-include zeam/jsontemplate/resources *.*
-recursive-include zeam/jsontemplate *.txt
+recursive-include src *.js *.py *.txt
 include *.txt
